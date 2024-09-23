@@ -12,7 +12,7 @@ This is a **Product Dashboard** built using **React** that allows users to filte
 
 ## Demo
 
-[Live Demo](screenshot)
+[Live Demo](https://66f12ef2856abdc0f163c533--voluble-bublanina-ce2304.netlify.app/)
 
 ## Technologies Used
 
