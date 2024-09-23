@@ -1,25 +1,21 @@
 import React from 'react';
 
-const ProductDetailsModal = ({ product, closeProductDetails }) => {
+const ProductDetailsModal = ({ product, isOpen, onClose }) => {
+  if (!isOpen) return null; 
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-2/3 lg:w-1/2">
-        <h2 className="text-2xl font-bold text-blue-700 mb-4">{product.title}</h2>
-        <p className="mb-2">
-          <strong>Price:</strong> Rs. {product.price}
-        </p>
-        <p className="mb-2">
-          <strong>Popularity:</strong> {product.popularity}
-        </p>
-        <p>
-          <strong>Description:</strong>{' '}
-          {product.description || 'No description available'}
-        </p>
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg p-4 shadow-lg relative w-96">
+        <h2 className="text-xl font-bold mb-4">Product Details</h2>
+        <p><strong>Title:</strong> {product.title}</p>
+        <p><strong>Price:</strong> {product.price}</p>
+        <p><strong>Popularity:</strong> {product.popularity}</p>
+        
         <button
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={closeProductDetails}
+          onClick={onClose} 
+          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
         >
-          Close
+          &times; 
         </button>
       </div>
     </div>

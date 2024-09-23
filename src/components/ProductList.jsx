@@ -14,11 +14,9 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
 
-  // Sorting state
-  const [priceSortOrder, setPriceSortOrder] = useState(''); // '' | 'asc' | 'desc'
-  const [popularitySortOrder, setPopularitySortOrder] = useState(''); // '' | 'asc' | 'desc'
+  const [priceSortOrder, setPriceSortOrder] = useState(''); 
+  const [popularitySortOrder, setPopularitySortOrder] = useState(''); 
 
-  // Modal state
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,7 +39,6 @@ const ProductList = () => {
   useEffect(() => {
     let filtered = [...products];
 
-    // Apply filters
     if (priceFilter) {
       const [minPrice, maxPrice] = priceFilter.split('-');
       filtered = filtered.filter(product => {
@@ -58,7 +55,6 @@ const ProductList = () => {
       });
     }
 
-    // Apply sorting
     if (priceSortOrder) {
       filtered.sort((a, b) => {
         const priceA = parseInt(a.price);
@@ -78,7 +74,6 @@ const ProductList = () => {
     setFilteredProducts(filtered);
   }, [priceFilter, popularityFilter, priceSortOrder, popularitySortOrder, products]);
 
-  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -96,29 +91,30 @@ const ProductList = () => {
     }
   };
 
-  // Handle popup open
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
 
-  // Close modal
   const closeProductDetails = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching products: {error}</div>;
+  if (loading) return <div className="text-center text-lg font-semibold mt-10">Loading...</div>;
+  if (error) return <div className="text-center text-red-500 mt-10">Error fetching products: {error}</div>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Product Dashboard</h1>
+      {/* Navbar */}
+      <nav className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-md shadow-md mb-8">
+        <h1 className="text-3xl font-bold text-center">🛍️ Product Dashboard</h1>
+      </nav>
 
       {/* Filters */}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex justify-center space-x-4 mb-4">
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded-md bg-white shadow-sm"
           value={priceFilter}
           onChange={(e) => setPriceFilter(e.target.value)}
         >
@@ -130,7 +126,7 @@ const ProductList = () => {
         </select>
 
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded-md bg-white shadow-sm"
           value={popularityFilter}
           onChange={(e) => setPopularityFilter(e.target.value)}
         >
@@ -143,11 +139,11 @@ const ProductList = () => {
       </div>
 
       {/* Sorting */}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex justify-center space-x-4 mb-8">
         <div>
-          <label className="mr-2">Sort by Price:</label>
+          <label className="mr-2 font-semibold">Sort by Price:</label>
           <select
-            className="border p-2 rounded"
+            className="border p-2 rounded-md bg-white shadow-sm"
             value={priceSortOrder}
             onChange={(e) => setPriceSortOrder(e.target.value)}
           >
@@ -158,9 +154,9 @@ const ProductList = () => {
         </div>
 
         <div>
-          <label className="mr-2">Sort by Popularity:</label>
+          <label className="mr-2 font-semibold">Sort by Popularity:</label>
           <select
-            className="border p-2 rounded"
+            className="border p-2 rounded-md bg-white shadow-sm"
             value={popularitySortOrder}
             onChange={(e) => setPopularitySortOrder(e.target.value)}
           >
@@ -172,12 +168,12 @@ const ProductList = () => {
       </div>
 
       {/* Product Table */}
-      <table className="table-auto w-full border-collapse border border-gray-200">
+      <table className="table-auto w-full border-collapse shadow-lg">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">Title</th>
-            <th className="border p-2">Price</th>
-            <th className="border p-2">Popularity</th>
+          <tr className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            <th className="p-3 border text-left">Title</th>
+            <th className="p-3 border text-left">Price</th>
+            <th className="p-3 border text-left">Popularity</th>
           </tr>
         </thead>
         <tbody>
@@ -185,11 +181,11 @@ const ProductList = () => {
             <tr
               key={index}
               onClick={() => handleProductClick(product)}
-              className="hover:bg-gray-50 cursor-pointer"
+              className="cursor-pointer hover:bg-blue-100 transition-colors"
             >
-              <td className="border p-2">{product.title}</td>
-              <td className="border p-2">{product.price}</td>
-              <td className="border p-2">{product.popularity}</td>
+              <td className="p-3 border">{product.title}</td>
+              <td className="p-3 border">{product.price}</td>
+              <td className="p-3 border">{product.popularity}</td>
             </tr>
           ))}
         </tbody>
@@ -224,15 +220,20 @@ const ProductList = () => {
           type="number"
           min="1"
           max={totalPages}
-          placeholder="Go to page"
+          placeholder="Page #"
+          value={currentPage}
           onChange={handleCustomPageChange}
-          className="border p-2 rounded w-20 ml-4"
+          className="p-2 border rounded-md w-20"
         />
       </div>
 
-      {/* Modal */}
-      {isModalOpen && selectedProduct && (
-        <ProductDetailsModal product={selectedProduct} closeProductDetails={closeProductDetails} />
+      {/* Modal for Product Details */}
+      {selectedProduct && (
+        <ProductDetailsModal
+          product={selectedProduct}
+          isOpen={isModalOpen}
+          onClose={closeProductDetails}
+        />
       )}
     </div>
   );

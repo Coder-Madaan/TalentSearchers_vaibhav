@@ -15,9 +15,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">Product Dashboard</h1>
-     
-      <ProductList filter={filter} />
+      <ProductList  />
     </div>
   );
 };
